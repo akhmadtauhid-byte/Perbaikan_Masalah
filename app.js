@@ -1,6 +1,6 @@
 // Peta Masalah Unit — SIMUTU-RS
 // PENTING: ganti API_URL di bawah dengan Web App URL hasil deploy Apps Script.
-const API_URL = 'GANTI_DENGAN_URL_WEB_APP_APPS_SCRIPT'; // <-- PLACEHOLDER: restore setiap update
+const API_URL = 'https://script.google.com/macros/s/AKfycbw_-qukMTAem1dU6sw9VrK4dvbVDSVcv9nC5VOFN29kZLivaDS2yudPVp8SaaQXYTCdlA/exec'; // <-- PLACEHOLDER: restore setiap update
 
 let currentUser = null;
 let masterUnit = [];
