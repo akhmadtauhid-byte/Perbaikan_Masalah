@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Peta Masalah Unit — SIMUTU-RS</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="login-screen" class="screen">
+  <div class="login-box">
+    <h1>Peta Masalah Unit</h1>
+    <p class="subtitle">SIMUTU-RS — RSU Allam Medica</p>
+    <input type="password" id="pin-input" placeholder="Masukkan PIN" maxlength="6" inputmode="numeric">
+    <button id="btn-login">Masuk</button>
+    <p id="login-error" class="error-text"></p>
+  </div>
+</div>
+
+<div id="app-screen" class="screen hidden">
+  <header class="topbar">
+    <div class="topbar-title">
+      <h1>Peta Masalah Unit</h1>
+      <span id="user-info"></span>
+    </div>
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+      <button class="tab-btn" data-tab="daftar">Daftar Masalah</button>
+      <button class="tab-btn" data-tab="lapor">Lapor Masalah</button>
+    </nav>
+    <button id="btn-logout">Keluar</button>
+  </header>
+
+  <main>
+    <!-- DASHBOARD -->
+    <section id="tab-dashboard" class="tab-content active">
+      <div class="stat-row">
+        <div class="stat-card">
+          <span class="stat-num" id="stat-total-aktif">-</span>
+          <span class="stat-label">Masalah Aktif</span>
+        </div>
+        <div class="stat-card stat-warn">
+          <span class="stat-num" id="stat-prioritas-tinggi">-</span>
+          <span class="stat-label">Prioritas Tinggi</span>
+        </div>
+        <div class="stat-card stat-danger">
+          <span class="stat-num" id="stat-terlambat">-</span>
+          <span class="stat-label">Rencana Terlambat</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="stat-total-semua">-</span>
+          <span class="stat-label">Total Sepanjang Waktu</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Peta Masalah — Unit × Kategori</h2>
+        <p class="panel-hint">Semakin gelap warnanya, semakin banyak masalah aktif (belum selesai) di kombinasi unit &amp; kategori tersebut.</p>
+        <div id="heatmap-wrap" class="table-wrap"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Ringkasan Status</h2>
+        <div id="status-chart" class="table-wrap"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Rencana Perbaikan Terlambat</h2>
+        <div id="terlambat-wrap" class="table-wrap"></div>
+      </div>
+    </section>
+
+    <!-- DAFTAR MASALAH -->
+    <section id="tab-daftar" class="tab-content">
+      <div class="filter-row">
+        <select id="filter-unit"><option value="">Semua Unit</option></select>
+        <select id="filter-kategori"><option value="">Semua Kategori</option></select>
+        <select id="filter-status">
+          <option value="">Semua Status</option>
+          <option>Baru</option>
+          <option>Diverifikasi</option>
+          <option>Dianalisis</option>
+          <option>Rencana Dibuat</option>
+          <option>Dalam Perbaikan</option>
+          <option>Selesai</option>
+          <option>Ditutup (Tidak Lanjut)</option>
+        </select>
+        <select id="filter-prioritas">
+          <option value="">Semua Prioritas</option>
+          <option>Tinggi</option>
+          <option>Sedang</option>
+          <option>Rendah</option>
+        </select>
+        <button id="btn-refresh-daftar">Terapkan</button>
+      </div>
+      <div id="daftar-wrap" class="table-wrap"></div>
+    </section>
+
+    <!-- LAPOR MASALAH -->
+    <section id="tab-lapor" class="tab-content">
+      <form id="form-lapor" class="form-box">
+        <h2>Lapor Masalah Baru</h2>
+        <label>Unit</label>
+        <select id="f-unit" required></select>
+
+        <label>Kategori</label>
+        <select id="f-kategori" required></select>
+
+        <label>Judul Masalah</label>
+        <input type="text" id="f-judul" required maxlength="150" placeholder="Ringkas, mis. 'AC ruang OK sering mati mendadak'">
+
+        <label>Deskripsi / Kronologi</label>
+        <textarea id="f-deskripsi" rows="4" required placeholder="Jelaskan kejadian, kapan, siapa yang terlibat, dampak yang dirasakan"></textarea>
+
+        <label>Tingkat Dampak</label>
+        <select id="f-dampak" required>
+          <option value="Rendah">Rendah — tidak mengganggu pelayanan</option>
+          <option value="Sedang">Sedang — mengganggu sebagian pelayanan</option>
+          <option value="Tinggi">Tinggi — mengganggu pelayanan signifikan</option>
+          <option value="Kritis">Kritis — berpotensi membahayakan pasien/staf</option>
+        </select>
+
+        <label>Frekuensi</label>
+        <select id="f-frekuensi" required>
+          <option value="Baru terjadi">Baru pertama kali terjadi</option>
+          <option value="Berulang">Sudah berulang kali</option>
+        </select>
+
+        <label>Link Lampiran (opsional)</label>
+        <input type="url" id="f-lampiran" placeholder="Link foto/dokumen Google Drive">
+
+        <button type="submit">Kirim Laporan</button>
+        <p id="lapor-msg" class="info-text"></p>
+      </form>
+    </section>
+  </main>
+</div>
+
+<!-- MODAL DETAIL MASALAH -->
+<div id="modal-detail" class="modal hidden">
+  <div class="modal-content">
+    <button id="btn-close-modal" class="modal-close">&times;</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
